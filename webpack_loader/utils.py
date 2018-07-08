@@ -14,8 +14,12 @@ def get_loader(config_name):
 
 def _filter_by_extension(bundle, extension):
     '''Return only files with the given extension'''
+    inverse = False
+    if extension.startswith("-"):
+        extension = extension[1:]
+        inverse = True
     for chunk in bundle:
-        if chunk['name'].endswith('.{0}'.format(extension)):
+        if chunk['name'].endswith('.{0}'.format(extension)) != inverse:
             yield chunk
 
 
@@ -50,7 +54,6 @@ def get_as_tags(bundle_name, extension=None, config='DEFAULT', attrs=''):
 
     tags = []
     for chunk in bundle:
-        print(f"chunk: {chunk} - chunk['url']: {chunk['url']}")
         if chunk['name'].endswith(('.js', '.js.gz')):
             tags.append((
                 '<script type="text/javascript" src="{0}" {1}></script>'
