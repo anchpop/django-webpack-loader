@@ -31,6 +31,11 @@ def get_files(bundle_name, extension=None, config='DEFAULT'):
     return list(_get_bundle(bundle_name, extension, config))
 
 
+def get_chunks(config='DEFAULT'):
+    '''Returns list of chunks from named bundle'''
+    return list(get_loader(config).get_all_chunks())
+
+
 def get_as_tags(bundle_name, extension=None, config='DEFAULT', attrs=''):
     '''
     Get a list of formatted <script> & <link> tags for the assets in the
@@ -41,10 +46,11 @@ def get_as_tags(bundle_name, extension=None, config='DEFAULT', attrs=''):
     :param config: (optional) the name of the configuration
     :return: a list of formatted tags as strings
     '''
-
     bundle = _get_bundle(bundle_name, extension, config)
+
     tags = []
     for chunk in bundle:
+        print(f"chunk: {chunk} - chunk['url']: {chunk['url']}")
         if chunk['name'].endswith(('.js', '.js.gz')):
             tags.append((
                 '<script type="text/javascript" src="{0}" {1}></script>'

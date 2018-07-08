@@ -56,6 +56,10 @@ class WebpackLoader(object):
         )
         return staticfiles_storage.url(relpath)
 
+    def get_all_chunks(self):
+        assets = self.get_assets()
+        return assets['chunks']
+
     def get_bundle(self, bundle_name):
         assets = self.get_assets()
 
@@ -80,7 +84,8 @@ class WebpackLoader(object):
         if assets.get('status') == 'done':
             chunks = assets['chunks'].get(bundle_name, None)
             if chunks is None:
-                raise WebpackBundleLookupError('Cannot resolve bundle {0}.'.format(bundle_name))
+                raise WebpackBundleLookupError(
+                    'Cannot resolve bundle {0}.'.format(bundle_name))
             return self.filter_chunks(chunks)
 
         elif assets.get('status') == 'error':
